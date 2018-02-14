@@ -1,0 +1,32 @@
+group 'uk.tommyt.kafka'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Main-Class': 'uk.tommyt.kafka.offsets.Main'
+    }
+    baseName = 'kafka-metrics'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+dependencies {
+    compile(
+            'org.slf4j:slf4j-simple:1.6+',
+            'org.apache.kafka:kafka-clients:1.0.0',
+            'com.sparkjava:spark-core:2.7+',
+            'com.fasterxml.jackson.core:jackson-databind:2.9+',
+            'com.fasterxml.jackson.core:jackson-annotations:2.9+',
+            'org.xerial:sqlite-jdbc:3+'
+    )
+
+    testCompile 'junit:junit:4+'
+}
